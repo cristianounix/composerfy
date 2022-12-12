@@ -1,93 +1,33 @@
-// import React from 'react';
-// import logo from './logo.svg';
-import { FormEvent, useCallback, useRef, useState } from 'react';
-import './App.css';
-import { Document, initialData } from './Models';
+import { useState } from 'react';
+import { useDockerImages } from './hooks/useImages';
 
-function App() {
-  const formRef = useRef<any>()
-  const [dockerCompose, setDockerCompose] = useState<Document>(initialData)
-
-
-  const handleFormSubmit = useCallback((event: any) => {
-    event.preventDefault()
-    const data = new FormData(event.target);
-    console.log('data', data)
-    console.log('data', )
-    data.forEach((d) => {
-      console.log('>>>', d)
-    })
-    
-    setDockerCompose((oldData: any) => {
-
-      const newDocument: Document = {
-        ...oldData
-      }
-
-      console.log('newDocument', newDocument)
-      return newDocument
-    })
-  },[])
-
-
+export default function App() {
+  const [dockerImage, setDockerImage] = useState<string>()
+  const { data: images } = useDockerImages({imageName: dockerImage})
   return (
-    <div className="App">
-
-      <div className='docker-compose-controls'>
-        <form onSubmit={handleFormSubmit} ref={formRef}>
-        <div>
+    <div>
         <div>
           <div>
-            Service Name 
+            <h2>ComposerFy</h2>
+            <span>Easy and fast docker-compose creation.</span>
           </div>
+ 
           <div>
-            <input type={"text"} name="serviceName" />
-          </div>
-        </div>
-        <div>
-          <div>Image</div>
-          <div>
-            <input type={"text"} name="image" />
-          </div>
-          <div>Version</div>
-          <div>
-            <input type={"text"} name="version" />
-          </div>
-        </div>
-        <div>
-          <div>Port Mapping:</div>
-          <div>Exposed Port</div>
-          <div>Internal Port</div>
-        </div>
-        <div>
-          <div>Volumes Mapping:</div>
-          <div>Local Dir/File</div>
-          <div>Internal Dir/File</div>
-        </div>
-        <div>
-          <div>Network:</div>
-          <div>Create or Select a network</div>
-          <div>
-            <select>
-              <option>default</option>
-            </select>
-          </div>
-        </div>
-        <div>
-          <button type='submit'>Criar 2</button>
-        </div>
-        </div>
-        </form>
+            <button
+              onClick={() => {
+                setDockerImage('nginx')
+              }}>
+              Start
+            </button>
+            <button  onClick={() => {
+                setDockerImage('')
+              }}>Cancel</button>
+          </div> 
       </div>
 
-      <div className='preview-docker-compose-structure'>
-        {JSON.stringify(dockerCompose)}
+      <div>
+          <pre>Hello world</pre>
       </div>
-      <div className='preview-docker-compose-structure-yml'>
-        {JSON.stringify(dockerCompose)}
       </div>
-    </div>
   );
 }
-
-export default App;
